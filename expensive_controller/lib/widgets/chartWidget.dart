@@ -3,12 +3,11 @@ import 'package:intl/intl.dart';
 
 import '../models/transactionModel.dart';
 import '../widgets/chartBarWidget.dart';
-import '../models/transactionModel.dart';
 
 class ChartWidget extends StatelessWidget {
   final List<TransactionModel> recentTransactions;
 
-  ChartWidget(this.recentTransactions);
+  const ChartWidget(this.recentTransactions);
 
   List<Map<String, Object>> get groupedTransactionValues {
     return List.generate(7, (index) {

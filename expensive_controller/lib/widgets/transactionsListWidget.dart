@@ -1,17 +1,39 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 
 import '../models/transactionModel.dart';
 import 'package:intl/intl.dart';
 
-class TransactionsList extends StatelessWidget {
+class TransactionsList extends StatefulWidget {
   final List<TransactionModel> transactionsList;
   final Function deleteTx;
 
   TransactionsList(this.transactionsList, this.deleteTx);
 
   @override
+  _TransactionsListState createState() => _TransactionsListState();
+}
+
+class _TransactionsListState extends State<TransactionsList> {
+ Color _bgColor;
+
+  @override
+  void initState() {
+    const availableColors = [
+      Colors.red,
+      Colors.black,
+      Colors.blue,
+      Colors.purple,
+    ];
+
+    _bgColor = availableColors[Random().nextInt(4)];
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    return transactionsList.isEmpty
+    return widget.transactionsList.isEmpty
         ? LayoutBuilder(builder: (context, constraints) {
             return Column(
               children: [
@@ -39,25 +61,26 @@ class TransactionsList extends StatelessWidget {
                 margin: EdgeInsets.symmetric(vertical: 8, horizontal: 5),
                 child: ListTile(
                   leading: CircleAvatar(
+                    backgroundColor: _bgColor,
                     radius: 30,
                     child: Padding(
                       padding: const EdgeInsets.all(6),
                       child: FittedBox(
-                        child: Text("\$${transactionsList[position].amount}"),
+                        child: Text("\$${widget.transactionsList[position].amount}"),
                       ),
                     ),
                   ),
                   title: Text(
-                    transactionsList[position].title,
+                    widget.transactionsList[position].title,
                     style: Theme.of(context).textTheme.headline6,
                   ),
                   subtitle: Text(
-                    DateFormat.yMMMd().format(transactionsList[position].date),
+                    DateFormat.yMMMd().format(widget.transactionsList[position].date),
                   ),
                   trailing: MediaQuery.of(context).size.width > 460
                       ? TextButton.icon(
                           onPressed: () =>
-                              deleteTx(transactionsList[position].id),
+                              widget.deleteTx(widget.transactionsList[position].id),
                           icon: Icon(Icons.delete),
                           label: Text("Delete"),
                           style: ButtonStyle(
@@ -69,12 +92,12 @@ class TransactionsList extends StatelessWidget {
                       : IconButton(
                           icon: Icon(Icons.delete),
                           onPressed: () =>
-                              deleteTx(transactionsList[position].id),
+                              widget.deleteTx(widget.transactionsList[position].id),
                           color: Theme.of(context).errorColor),
                 ),
               );
             },
-            itemCount: transactionsList.length,
+            itemCount: widget.transactionsList.length,
           );
   }
 }
